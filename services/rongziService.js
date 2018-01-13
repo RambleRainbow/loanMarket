@@ -20,7 +20,7 @@ function RongziService() {
           Signature: "",
 
           //默认处理
-          TimeStamp: '20180113222222'//moment().format('YYYYMMDDHHmmss'),
+          TimeStamp: moment().format('YYYYMMDDHHmmss'),
         }
       }
     },

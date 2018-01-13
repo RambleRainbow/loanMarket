@@ -1,15 +1,17 @@
-"use strict"
+"use strict";
 require('should');
 let utt = require('../services/rongziService.js');
 
 describe('签名算法', function() {
     it('签名', function() {
-        let sign = "";
-        sign = utt.sign('False', '20180110153243');
+        let sign = utt.sign('False', '20180110153243');
         sign.should.equal('c2811f9ef79401933559ddde528a9c72');
 
         sign = utt.sign('10008081230', '20160828202045');
         sign.should.equal('40b1bfaddee69c77acf4ca0c4c1ea582');
+
+        sign = utt.sign('False', '20180113221843');
+        sign.should.equal('5725d01026f65612b10aa8b888603abb');
     })
 });
 
@@ -23,7 +25,7 @@ describe('东方融资网《是否注册》接口测试', function() {
 
             console.log(data);
             data.should.have.property('Code').which.is.String();
-            data.Code.should.equal('0');//调用成本
+            data.Code.should.equal('0');//调用结果
 
             data.should.have.property('IsRegistered').which.is.Boolean();
             data.IsRegistered.should.equal(false);//未注册

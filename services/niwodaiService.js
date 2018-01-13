@@ -25,7 +25,7 @@ function NiwodaiService() {
       }
     },
 
-    loan: () => {
+    loanAPI: () => {
       return {
         accessCode: "514b3233-4854-4325-81ef-fd1823fded09",
         json: {
@@ -74,7 +74,7 @@ NiwodaiService.prototype.getTokenAPI = function () {
 
 NiwodaiService.prototype.loanAPI = function ({cityName, phone, realName, amount, token}) {
   return (async () => {
-    let data = this.apiDefs.loan();
+    let data = this.apiDefs.loanAPI();
     data.json  = _.extend(data.json, arguments[0]);
     let rtn = await this.post(data);
     return rtn;

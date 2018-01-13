@@ -12,7 +12,7 @@ describe('好贷接口测试', function() {
         realName: '张三',
         amount: 1
       };
-      let data = await utt.loan(testData);
+      let data = await utt.loanAPI(testData);
 
       console.log(data);
       data.should.have.property('code').which.is.Number();

@@ -64,7 +64,7 @@ describe('东方融资网《注册》接口测试', function() {
                 amount: 5
             };
 
-            let data =await utt.Register(testData);
+            let data =await utt.registerAPI(testData);
             console.log(data);
             data.should.have.property('Code').which.is.String();
             data.Code.should.equal('0');//调用成功

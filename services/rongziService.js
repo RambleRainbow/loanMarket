@@ -55,8 +55,6 @@ function RongziService() {
       }
     }
   };
-
-
 }
 
 RongziService.prototype.sign = function () {
@@ -91,49 +89,72 @@ RongziService.prototype.isRegisteredAPI = function ({phone}) {
   })();
 };
 
-RongziService.prototype.Register = function ({cityName, phone, realName, gender, amount}) {
-  return new Promise((resolve, reject) => {
-    (async () => {
-      let fields = {
-        CityName: cityName,
-        CellPhoneNumber: phone,
-        RealName: realName,
-        Gender: gender,
-        LoanAmount: amount,
-        TimeStamp: moment().format('YYYYMMDDHHmmss'),
-      };
-      let postData = _.extend({}, this.apiDefs.register.param(), fields);
-      postData.Signature = this.sign(
-        postData.CityName,
-        postData.CellPhoneNumber,
-        postData.RealName,
-        postData.Gender,
-        postData.LoanAmount,
-        postData.UtmSource,
-        postData.TimeStamp
-      );
-
-      request({
-          url: this.apiDefs.register.url,
-          method: 'POST',
-          json: true,
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: postData,
-        },
-        (e, res, body) => {
-          if (e) {
-            reject(e)
-          }
-          try {
-            resolve(body);
-          } catch (e) {
-            reject(e);
-          }
-        })
-    })();
-  });
+RongziService.prototype.registerAPI = function ({cityName, phone, realName, gender, amount}) {
+  return (async () => {
+    let refParam = {
+      CityName: cityName,
+      CellPhoneNumber: phone,
+      RealName: realName,
+      Gender: gender,
+      LoanAmount: amount
+    };
+    let param = _.extend(this.apiDefs.register.param(), refParam);
+    param.Signature = this.sign(
+      param.CityName,
+      param.CellPhoneNumber,
+      param.RealName,
+      param.Gender,
+      param.LoanAmount,
+      param.UtmSource,
+      param.TimeStamp
+    );
+    return await this.post({
+      url: this.apiDefs.register.url,
+      param
+    });
+  })();
+  // return new Promise((resolve, reject) => {
+  //   (async () => {
+  //     let fields = {
+  //       CityName: cityName,
+  //       CellPhoneNumber: phone,
+  //       RealName: realName,
+  //       Gender: gender,
+  //       LoanAmount: amount,
+  //       TimeStamp: moment().format('YYYYMMDDHHmmss'),
+  //     };
+  //     let postData = _.extend({}, this.apiDefs.register.param(), fields);
+  //     postData.Signature = this.sign(
+  //       postData.CityName,
+  //       postData.CellPhoneNumber,
+  //       postData.RealName,
+  //       postData.Gender,
+  //       postData.LoanAmount,
+  //       postData.UtmSource,
+  //       postData.TimeStamp
+  //     );
+  //
+  //     request({
+  //         url: this.apiDefs.register.url,
+  //         method: 'POST',
+  //         json: true,
+  //         headers: {
+  //           'Content-Type': 'application/json'
+  //         },
+  //         body: postData,
+  //       },
+  //       (e, res, body) => {
+  //         if (e) {
+  //           reject(e)
+  //         }
+  //         try {
+  //           resolve(body);
+  //         } catch (e) {
+  //           reject(e);
+  //         }
+  //       })
+  //   })();
+  // });
 };
 
 

@@ -1,8 +1,11 @@
 "use strict";
 let request = require('request');
+let bb = require('bluebird');
 let moment = require('moment');
 let crypto = require('crypto');
 let _ = require('lodash');
+
+let requestAsync = bb.promisify(request);
 
 
 function RongziService() {
@@ -11,17 +14,17 @@ function RongziService() {
   this.apiDefs = {
     isRegistered: {
       url: "http://103.242.169.60:19999/rzr/Transfer/isRegistered",
-      params: () => {
+      param: () => {
         return {
           CellPhoneNumber: "",
           Signature: "",
 
           //默认处理
-          TimeStamp: moment().format('YYYYMMDDHHmmss'),
+          TimeStamp: '20180113222222'//moment().format('YYYYMMDDHHmmss'),
         }
       }
     }
-  }
+  };
 
   this.registerAPI = {
     url: "http://103.242.169.60:19999/rzr/Transfer/Register",
@@ -60,36 +63,29 @@ RongziService.prototype.sign = function () {
   return md5.digest('hex');
 };
 
-RongziService.prototype.isRegisteredAPI = function ({phone}) {
-  return new Promise((resolve, reject) => {
-    let postData = {
-      CellPhoneNumber: phone,
-      TimeStamp: moment().format('YYYYMMDDHHmmss'),
-      Signature: ''
-    };
-    postData.Signature = this.sign(postData.CellPhoneNumber, postData.TimeStamp);
-
-    request({
-        url: this.apiDefs.isRegistered.url,
-        method: "POST",
-        json: true,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: postData
-      },
-      (e, res, body) => {
-        if (e) {
-          reject(e)
-        }
-        try {
-          resolve(body);
-        } catch (e) {
-          reject(e);
-        }
-      }
-    )
+RongziService.prototype.post = async ({url, param}) => {
+  let res = await requestAsync({
+    url: url,
+    method: 'POST',
+    json: true,
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: param
   });
+  return res.body;
+};
+
+RongziService.prototype.isRegisteredAPI = function ({phone}) {
+  return (async () => {
+    let param = this.apiDefs.isRegistered.param();
+    param.CellPhoneNumber = phone;
+    param.Signature = this.sign(param.CellPhoneNumber, param.TimeStamp);
+    return await this.post({
+      url: this.apiDefs.isRegistered.url,
+      param: param
+    });
+  })();
 };
 
 RongziService.prototype.Register = function ({cityName, phone, realName, gender, amount}) {

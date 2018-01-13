@@ -68,8 +68,7 @@ NiwodaiService.prototype.post = function (data) {
 NiwodaiService.prototype.getTokenAPI = function () {
   return (async () => {
     let data = this.apiDefs.getToken();
-    let rtn = await this.post(data);
-    return rtn;
+    return await this.post(data);
   })();
 };
 

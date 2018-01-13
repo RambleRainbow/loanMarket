@@ -113,49 +113,6 @@ RongziService.prototype.registerAPI = function ({cityName, phone, realName, gend
       param
     });
   })();
-  // return new Promise((resolve, reject) => {
-  //   (async () => {
-  //     let fields = {
-  //       CityName: cityName,
-  //       CellPhoneNumber: phone,
-  //       RealName: realName,
-  //       Gender: gender,
-  //       LoanAmount: amount,
-  //       TimeStamp: moment().format('YYYYMMDDHHmmss'),
-  //     };
-  //     let postData = _.extend({}, this.apiDefs.register.param(), fields);
-  //     postData.Signature = this.sign(
-  //       postData.CityName,
-  //       postData.CellPhoneNumber,
-  //       postData.RealName,
-  //       postData.Gender,
-  //       postData.LoanAmount,
-  //       postData.UtmSource,
-  //       postData.TimeStamp
-  //     );
-  //
-  //     request({
-  //         url: this.apiDefs.register.url,
-  //         method: 'POST',
-  //         json: true,
-  //         headers: {
-  //           'Content-Type': 'application/json'
-  //         },
-  //         body: postData,
-  //       },
-  //       (e, res, body) => {
-  //         if (e) {
-  //           reject(e)
-  //         }
-  //         try {
-  //           resolve(body);
-  //         } catch (e) {
-  //           reject(e);
-  //         }
-  //       })
-  //   })();
-  // });
 };
-
 
 module.exports = new RongziService();

@@ -1,12 +1,12 @@
 "use strict";
 let bb = require('bluebird');
 let request = require('request');
-let requestAsync = bb.promisify(request);
 let _ = require('lodash');
+let requestAsync = bb.promisify(request);
+let cityTransService = require('../services/cityTransService');
 
 function NiwodaiService() {
   this.url = "http://api.niwodai.org/interface/callHttpInterfaces.do";
-
   this.appId = "APItest";
   this.appKey = "niwodai88";
   this.sourceId = "";
@@ -81,7 +81,7 @@ NiwodaiService.prototype.loanAPI = function ({cityName, phone, realName, amount,
   })();
 };
 
-NiwodaiService.prototype.doLoan = function ({cityId, phone, realName, amount}) {
+NiwodaiService.prototype.doLoan = function ({cityId, phone, realName, gender, amount}) {
   return (async () => {
     let token = await this.getTokenAPI();
     if (token.success !== 1) {
@@ -91,7 +91,13 @@ NiwodaiService.prototype.doLoan = function ({cityId, phone, realName, amount}) {
       }
     }
 
-    let params = this.translateParam(_.extend(arguments[0], {token: token.data.accessCode}));
+    let params = {
+      cityName: cityTransService.trans(cityId, cityTransService.CITYGROUP_NIWODAI),
+      phone,
+      realName,
+      amount,
+      token: token.data.accessToken
+    };
     let rtn = await this.loanAPI(params);
     if(rtn.success !== 1) {
       return {
@@ -104,7 +110,7 @@ NiwodaiService.prototype.doLoan = function ({cityId, phone, realName, amount}) {
       errorCode: 0,
       msg: '[发送成功]：' + JSON.stringify(rtn)
     }
-  });
+  })();
 };
 
 module.exports = new NiwodaiService();

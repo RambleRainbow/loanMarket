@@ -3,7 +3,7 @@ let bb = require('bluebird');
 let request = require('request');
 let _ = require('lodash');
 let requestAsync = bb.promisify(request);
-let cityTransService = require('../services/cityTransService');
+let cityTransService = require('./cityService');
 
 function NiwodaiService() {
   this.url = "http://api.niwodai.org/interface/callHttpInterfaces.do";

@@ -1,6 +1,6 @@
 "use strict"
 require('should');
-let utt = require('../services/niwodaiService.js');
+let utt = require('../../services/niwodaiService.js');
 
 describe('你我贷接口测试', function () {
   it("getToken接口调用", function (done) {

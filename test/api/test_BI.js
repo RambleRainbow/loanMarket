@@ -1,7 +1,7 @@
 require('should');
 let sinon = require('sinon');
-let nwd = require('../services/niwodaiService.js');
-let cityTransService = require('../services/cityTransService.js');
+let nwd = require('../../services/niwodaiService.js');
+let cityTransService = require('../../services/cityService.js');
 
 describe('你我贷业务接口测试', function() {
   it('贷款申请', function(done) {

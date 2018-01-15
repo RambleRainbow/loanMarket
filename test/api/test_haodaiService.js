@@ -1,6 +1,6 @@
 "use strict"
 require('should');
-let utt = require('../services/haodaiService.js');
+let utt = require('../../services/haodaiService.js');
 
 describe('好贷接口测试', function() {
   it('正确调用', function(done) {

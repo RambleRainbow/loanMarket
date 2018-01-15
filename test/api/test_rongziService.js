@@ -1,6 +1,6 @@
 "use strict";
 require('should');
-let utt = require('../services/rongziService.js');
+let utt = require('../../services/rongziService.js');
 
 describe('签名算法', function() {
     it('签名', function() {

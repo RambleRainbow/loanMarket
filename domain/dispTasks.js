@@ -5,6 +5,7 @@ let crypto = require('crypto');
 let moment = require('moment');
 
 let channels = require('./channels.js');
+let dicts = require('./dicts.js');
 
 let m_tasks = [];
 
@@ -24,11 +25,11 @@ DispTasks.prototype.postTaskToChannel = async function() {
   for(let i = 0; i < validTasks.length; i++ ) {
     let rtnPort = await channels.postTask(validTasks[i]);
     if(rtnPort.errorCode === 0) {
-      rtn = await this.updateTask(validTasks[i].taskId, this.TASKSTATE_SUCCESS, rtnPort.msg);
+      rtn = await this.updateTask(validTasks[i].taskId, dicts.taskState.TASKSTATE_SUCCESS, rtnPort.msg);
     }
     else
     {
-      rtn = await this.updateTask(validTasks[i].taskId, this.TASKSTATE_FAIL, rtnPort.msg);
+      rtn = await this.updateTask(validTasks[i].taskId, dicts.taskState.TASKSTATE_FAIL, rtnPort.msg);
     }
   }
 
@@ -56,7 +57,7 @@ DispTasks.prototype.create = async function({channelId, planTime, cityId, phone,
   let taskDO = _.extend(arguments[0], {
     taskId: this.makeTaskId(arguments[0]),
     orgTaskId: '',
-    taskState: this.TASKSTATE_PENDING
+    taskState: dicts.taskState.TASKSTATE_INIT
   });
   let rtn = await this.saveTask(taskDO);
 
@@ -66,8 +67,8 @@ DispTasks.prototype.create = async function({channelId, planTime, cityId, phone,
   }
 };
 
-DispTasks.prototype.TASKSTATE_PENDING = 1;
-DispTasks.prototype.TASKSTATE_FAIL = 2;
-DispTasks.prototype.TASKSTATE_SUCCESS = 3;
+// DispTasks.prototype.TASKSTATE_PENDING = 1;
+// DispTasks.prototype.TASKSTATE_FAIL = 2;
+// DispTasks.prototype.TASKSTATE_SUCCESS = 3;
 
 module.exports = new DispTasks();

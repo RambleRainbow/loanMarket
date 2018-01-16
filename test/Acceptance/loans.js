@@ -6,6 +6,13 @@ let _ = require('lodash');
 let loans = require('../../domain/loans');
 let nwd = require('../../services/niwodaiService');
 let db = require('../../services/dbService');
+let dicts = require('../../domain/dicts.js');
+
+function objEqualto(objPart, objAll) {
+  _.forIn(objPart, (value, key) => {
+    objAll.should.have.property(key, value);
+  });
+}
 
 describe('提交申请', function () {
   let nwdMock;
@@ -38,6 +45,25 @@ describe('提交申请', function () {
       });
       done();
     })();
+  });
+
+  it('当向平台提交申请时，应生成对应的申请数据库记录,以及发送任务记录', async () => {
+    let spyLoan = sinon.spy(db, 'saveLoan');
+    let spyTask = sinon.spy(db, 'saveTask');
+
+    let rtn = await loans.create(testData);
+
+    console.log(rtn);
+
+    rtn.should.have.property('errorCode', 0);
+    spyLoan.calledOnce.should.equal(true);
+    objEqualto(testData, spyLoan.getCall(0).args[0]);
+    objEqualto({
+        ticketId: spyLoan.getCall(0).args[0].ticketId,
+        taskState: dicts.taskState.TASKSTATE_INIT
+      },
+      spyTask.getCall(0).args[0]
+    );
   });
 
   afterEach(function () {

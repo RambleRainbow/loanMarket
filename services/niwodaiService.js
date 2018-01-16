@@ -6,6 +6,8 @@ let requestAsync = bb.promisify(request);
 let cityTransService = require('./cityService');
 
 function NiwodaiService() {
+  this.ChannelId = cityTransService.CHANNEL_NIWODAI;
+
   this.url = "http://api.niwodai.org/interface/callHttpInterfaces.do";
   this.appId = "APItest";
   this.appKey = "niwodai88";

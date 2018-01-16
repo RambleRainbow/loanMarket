@@ -3,9 +3,14 @@ let _ = require('lodash');
 let crypto = require('crypto');
 let request = require('request');
 let bb = require('bluebird');
+
+let cityService = require('./cityService.js');
+
 let requestAsync = bb.promisify(request);
 
 function HaodaiService() {
+  this.ChannelId = cityService.CHANNEL_HAODAI;
+
   this.key = 'oadn8DkzKf0jvV0hi9fKxaiXSMktnYot';
   this.channel_id = 23;
   this.biaoshi = 19;

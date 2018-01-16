@@ -4,11 +4,14 @@ let bb = require('bluebird');
 let moment = require('moment');
 let crypto = require('crypto');
 let _ = require('lodash');
+let cityService = require('./cityService.js');
 
 let requestAsync = bb.promisify(request);
 
 
 function RongziService() {
+  this.ChannelId = cityService.CHANNEL_RONGZI;
+
   this.secretKey = 'rongzi.com_8763';
 
   this.apiDefs = {

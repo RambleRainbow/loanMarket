@@ -11,47 +11,41 @@ let cityService = require('../services/cityService');
 function Loans() {
 }
 
-Loans.prototype.makeTicketId = function ({city, phone, name, gender, amount}) {
+Loans.prototype.makeTicketId = function ({cityId, phone, name, gender, amount}) {
   let hash = crypto.createHash('sha256');
-  let data = city + phone + name + gender + amount + (new Date()).valueOf().toString() +  Math.random().toString();
+  let data = cityId + phone + name + gender + amount + (new Date()).valueOf().toString() +  Math.random().toString();
   hash.update(data);
   return hash.digest('HEX');
 };
 
-Loans.prototype.createTasks = function(loanItem) {
+Loans.prototype.createTasks = function({cityId, phone, name, gender, amount}) {
   let tasks = [];
 
-  if(loanItem.amount <= 5 && cityService.haveCityIn(loanItem.city, cityService.CHANNELID_NIWODAI)){
+  if(amount <= 5 && cityService.haveCityIn(cityId, cityService.CHANNEL_NIWODAI)){
     tasks.push({
-      channelId: cityService.CHANNELID_NIWODAI,
-      ticketId: loanItem.ticketId,
+      channelId: cityService.CHANNEL_NIWODAI,
       planTime: moment().format('YYYY-MM-DD HH:mm:ss'),
-      loan: loanItem
     })
   }
 
-  if(loanItem.amount >= 5 && cityService.haveCityIn(loanItem.city, cityService.CHANNELID_RONGZI)){
+  if(amount >= 5 && cityService.haveCityIn(cityId, cityService.CHANNEL_RONGZI)){
     tasks.push({
-      channelId: cityService.CHANNELID_RONGZI,
-      ticketId: loanItem.ticketId,
+      channelId: cityService.CHANNEL_RONGZI,
       planTime: moment().format('YYYY-MM-DD HH:mm:ss'),
-      loan: loanItem
     })
   }
 
-  if(loanItem.amount >= 3 && cityService.haveCityIn(loanItem.city, cityService.CHANNELID_HAODAI)){
+  if(amount >= 3 && cityService.haveCityIn(cityId, cityService.CHANNEL_HAODAI)){
     tasks.push({
-      channelId: cityService.CHANNELID_HAODAI,
-      titicketId: loanItem.ticketId,
+      channelId: cityService.CHANNEL_HAODAI,
       planTime: moment().format('YYYY-MM-DD HH:mm:ss'),
-      loan: loanItem
     })
   }
 
   return tasks;
 };
 
-Loans.prototype.create = async function ({city, phone, name, gender, amount}) {
+Loans.prototype.create = async function ({cityId, phone, name, gender, amount}) {
   let loanItem = _.extend(arguments[0], {ticketId: ''});
   loanItem.ticketId = this.makeTicketId(arguments[0]);
 
@@ -59,12 +53,14 @@ Loans.prototype.create = async function ({city, phone, name, gender, amount}) {
   if (rtn.errorCode != 0) {
     return {
       errorCode: this.ERROR_DBOPT,
-      msg: '数据库保存失败'
+      msg: '[数据库保存失败]' + rtn.msg
     }
   }
 
   let tasks = this.createTasks(loanItem);
-  dispTasks.create(tasks);
+  // for(let i = 0; i <tasks.length; i++) {
+  //   await dispTasks.create(_.extend(tasks[i], loanItem));
+  // }
 
   return {
     errorCode: 0,

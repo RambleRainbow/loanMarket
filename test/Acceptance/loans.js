@@ -1,16 +1,17 @@
-"use strict"
+"use strict";
 require('should');
 let sinon = require('sinon');
 
 
 let loans = require('../../domain/loans');
 let nwd = require('../../services/niwodaiService');
+let db = require('../../services/dbService');
 
 describe('提交申请', function() {
   let nwdMock;
   beforeEach( function() {
     nwdMock = sinon.mock(nwd);
-  })
+  });
 
   it('当向平台提交申请时，应向对应的贷款网站提交数据', function(done) {
     (async() => {
@@ -36,5 +37,6 @@ describe('提交申请', function() {
 
   afterEach(function() {
     nwdMock.restore();
+    db.shutdown();
   });
 });

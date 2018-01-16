@@ -18,7 +18,7 @@ Loans.prototype.makeTicketId = function ({cityId, phone, name, gender, amount}) 
   return hash.digest('HEX');
 };
 
-Loans.prototype.createTasks = function({cityId, phone, name, gender, amount}) {
+Loans.prototype.createTasks = function({cityId, amount}) {
   let tasks = [];
 
   if(amount <= 5 && cityService.haveCityIn(cityId, cityService.CHANNEL_NIWODAI)){
@@ -50,7 +50,7 @@ Loans.prototype.create = async function ({cityId, phone, name, gender, amount}) 
   loanItem.ticketId = this.makeTicketId(arguments[0]);
 
   let rtn = await db.saveLoan(loanItem);
-  if (rtn.errorCode != 0) {
+  if (rtn.errorCode !== db.ERROR_SUCCESS) {
     return {
       errorCode: this.ERROR_DBOPT,
       msg: '[数据库保存失败]' + rtn.msg
@@ -58,9 +58,9 @@ Loans.prototype.create = async function ({cityId, phone, name, gender, amount}) 
   }
 
   let tasks = this.createTasks(loanItem);
-  // for(let i = 0; i <tasks.length; i++) {
-  //   await dispTasks.create(_.extend(tasks[i], loanItem));
-  // }
+  for(let i = 0; i <tasks.length; i++) {
+    await dispTasks.create(_.extend(tasks[i], loanItem));
+  }
 
   return {
     errorCode: 0,

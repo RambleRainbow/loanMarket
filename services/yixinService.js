@@ -41,4 +41,6 @@ function YixinService() {
   }
 };
 
-YixinService.prototype.cluesAPI = async({cityName,phone, realName,})
+YixinService.prototype.cluesAPI = async function({cityName,phone, realName,}){
+
+}

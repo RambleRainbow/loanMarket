@@ -4,7 +4,7 @@ let bb = require('bluebird');
 let moment = require('moment');
 let crypto = require('crypto');
 let _ = require('lodash');
-let cityService = require('./cityService.js');
+let cityService = require('../domain/cities.js');
 
 let requestAsync = bb.promisify(request);
 

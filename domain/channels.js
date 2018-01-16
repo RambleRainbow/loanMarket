@@ -3,15 +3,13 @@
 let nwdService = require('../services/niwodaiService.js');
 let rzService = require('../services/rongziService.js');
 let hdService = require('../services/haodaiService.js');
-let cityService = require('../services/cityService.js');
 
 function Channels() {
 }
 
-//TODO: Channels.postTask
-Channels.prototype.postTask = async function({channelId,task}) {
-  var rtn;
-  switch (channelId) {
+Channels.prototype.postTask = async function(task) {
+  let rtn;
+  switch (task.channelId) {
     case nwdService.ChannelId:
       rtn = await nwdService.doLoan(task);
       break;

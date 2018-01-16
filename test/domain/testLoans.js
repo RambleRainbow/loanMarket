@@ -6,7 +6,7 @@ let _ = require('lodash');
 let loans = require('../../domain/loans.js');
 let db = require('../../services/dbService.js');
 let dispTasks = require('../../domain/dispTasks.js');
-let cityService = require('../../services/cityService');
+let cityService = require('../../domain/cities');
 
 describe("[贷款] create操作", function() {
   let dbMock;
@@ -36,7 +36,7 @@ describe("[贷款] create操作", function() {
     let rtn = await loans.create(testData);
 
     rtn.should.have.property('errorCode', 0);
-    rtn.should.have.property('msg','调用成功')
+    rtn.should.have.property('msg','调用成功');
     rtn.should.have.property('data').which.is.Object();
     rtn.data.ticketId.should.match(/[0-9a-z]{32}/);
 

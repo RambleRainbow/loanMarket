@@ -1,7 +1,7 @@
 require('should');
 let sinon = require('sinon');
 let nwd = require('../../services/niwodaiService.js');
-let cityTransService = require('../../services/cityService.js');
+let cityTransService = require('../../domain/cities.js');
 
 describe('你我贷业务接口测试', function() {
   it('贷款申请', function(done) {
@@ -15,7 +15,7 @@ describe('你我贷业务接口测试', function() {
         realName: '李四',
         gender: '先生',
         amount: 1
-      }
+      };
 
       let rtn = await nwd.doLoan(testData);
       console.log(rtn);

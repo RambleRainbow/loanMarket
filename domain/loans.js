@@ -5,7 +5,7 @@ let moment = require('moment');
 
 let db = require('../services/dbService');
 let dispTasks = require('./dispTasks.js');
-let cityService = require('../services/cityService');
+let cityService = require('./cities');
 
 
 function Loans() {

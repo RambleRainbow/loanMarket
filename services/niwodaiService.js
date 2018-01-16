@@ -3,7 +3,7 @@ let bb = require('bluebird');
 let request = require('request');
 let _ = require('lodash');
 let requestAsync = bb.promisify(request);
-let cityTransService = require('./cityService');
+let cityTransService = require('../domain/cities');
 
 function NiwodaiService() {
   this.ChannelId = cityTransService.CHANNEL_NIWODAI;
@@ -57,7 +57,7 @@ NiwodaiService.prototype.post = function (data) {
     let postData = {
       accessCode: data.accessCode,
       jsonParam: JSON.stringify(data.json)
-    }
+    };
     let rtn = await requestAsync({
       url: this.url,
       method: 'POST',

@@ -19,8 +19,16 @@ Channels.prototype.postTask = async function(task) {
     case hdService.ChannelId:
       rtn = await hdService.doLoan(task);
       break;
+    default:
+      rtn = {
+        errorCode: this.ERROR_NOMATCHCHANNEL,
+        msg: '未找到合适的推送通道'
+      };
   }
   return rtn;
 };
+
+Channels.prototype.ERROR_SUCCESS = 0;
+Channels.prototype.ERROR_NOMATCHCHANNEL = -1;
 
 module.exports = new Channels();

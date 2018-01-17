@@ -3,10 +3,11 @@ let bb = require('bluebird');
 let request = require('request');
 let _ = require('lodash');
 let requestAsync = bb.promisify(request);
-let cityTransService = require('../domain/cities');
+let cityTransService = require('../domain/cities.js');
+let dicts = require('../domain/dicts.js');
 
 function NiwodaiService() {
-  this.ChannelId = cityTransService.CHANNEL_NIWODAI;
+  this.ChannelId = dicts.channel.CHANNEL_NIWODAI;
 
   this.url = "http://api.niwodai.org/interface/callHttpInterfaces.do";
   this.appId = "APItest";

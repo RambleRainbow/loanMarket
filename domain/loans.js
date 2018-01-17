@@ -6,6 +6,7 @@ let moment = require('moment');
 let db = require('../services/dbService');
 let dispTasks = require('./dispTasks.js');
 let cityService = require('./cities');
+let dicts = require('./dicts.js');
 
 
 function Loans() {
@@ -23,21 +24,21 @@ Loans.prototype.createTasks = function({cityId, amount}) {
 
   if(amount <= 5 && cityService.haveCityIn(cityId, cityService.CHANNEL_NIWODAI)){
     tasks.push({
-      channelId: cityService.CHANNEL_NIWODAI,
+      channelId: dicts.channel.CHANNEL_NIWODAI,
       planTime: moment().format('YYYY-MM-DD HH:mm:ss'),
     })
   }
 
   if(amount >= 5 && cityService.haveCityIn(cityId, cityService.CHANNEL_RONGZI)){
     tasks.push({
-      channelId: cityService.CHANNEL_RONGZI,
+      channelId: dicts.channel.CHANNEL_RONGZI,
       planTime: moment().format('YYYY-MM-DD HH:mm:ss'),
     })
   }
 
   if(amount >= 3 && cityService.haveCityIn(cityId, cityService.CHANNEL_HAODAI)){
     tasks.push({
-      channelId: cityService.CHANNEL_HAODAI,
+      channelId: dicts.channel.CHANNEL_HAODAI,
       planTime: moment().format('YYYY-MM-DD HH:mm:ss'),
     })
   }

@@ -5,12 +5,13 @@ let moment = require('moment');
 let crypto = require('crypto');
 let _ = require('lodash');
 let cityService = require('../domain/cities.js');
+let dicts = require('../domain/dicts.js');
 
 let requestAsync = bb.promisify(request);
 
 
 function RongziService() {
-  this.ChannelId = cityService.CHANNEL_RONGZI;
+  this.ChannelId = dicts.channel.CHANNEL_RONGZI;
 
   this.secretKey = 'rongzi.com_8763';
 
@@ -117,5 +118,13 @@ RongziService.prototype.registerAPI = function ({cityName, phone, realName, gend
     });
   })();
 };
+
+RongziService.prototype.doLoan = function ({cityId, phone, realName, gender, amount}) {
+  //TODO:
+  return {
+    errorCode: 0,
+    msg: "[发送成功]"
+  }
+}
 
 module.exports = new RongziService();

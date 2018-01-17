@@ -5,11 +5,12 @@ let request = require('request');
 let bb = require('bluebird');
 
 let cityService = require('../domain/cities.js');
+let dicts = require('../domain/dicts.js');
 
 let requestAsync = bb.promisify(request);
 
 function HaodaiService() {
-  this.ChannelId = cityService.CHANNEL_HAODAI;
+  this.ChannelId = dicts.channel.CHANNEL_HAODAI;
 
   this.key = 'oadn8DkzKf0jvV0hi9fKxaiXSMktnYot';
   this.channel_id = 23;
@@ -97,5 +98,13 @@ HaodaiService.prototype.loanAPI = function ({cityId, phone, realName, amount}) {
     });
   })();
 };
+
+HaodaiService.prototype.doLoan = function ({cityId, phone, realName, gender, amount}) {
+  //TODO: haodaiService.doLoan
+  return {
+    errorCode: 0,
+    msg: '[发送成功]'
+  }
+}
 
 module.exports = new HaodaiService();

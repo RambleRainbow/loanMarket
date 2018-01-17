@@ -2,14 +2,7 @@
 let mysql = require('mysql');
 let moment = require('moment');
 
-let pool = mysql.createPool({
-  connectionLimit: 10,
-  host: '127.0.0.1',
-  user: 'root',
-  password: '1234',
-  database: 'loan'
-});
-
+let pool = null;
 
 function DbService() {
 }
@@ -72,6 +65,17 @@ DbService.prototype.updateTask = async function ({taskId, state, msg}) {
     values: [state, msg, moment().format('YYYY-MM-DD HH:mm:ss'), taskId]
   });
 };
+
+DbService.prototype.startup = function() {
+  pool = mysql.createPool({
+    connectionLimit: 10,
+    host: '127.0.0.1',
+    user: 'root',
+    password: '1234',
+    database: 'loan'
+  });
+};
+
 
 DbService.prototype.shutdown = function() {
   pool.end();

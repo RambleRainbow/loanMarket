@@ -8,6 +8,7 @@ let Dicts = {
     CHANNEL_HAODAI: 10,
     CHANNEL_RONGZI: 20,
     CHANNEL_NIWODAI: 30,
+    CHANNEL_FRONT: 40,
     CHANNEL_YIXIN: 50
   }
 };

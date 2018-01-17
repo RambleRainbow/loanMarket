@@ -3,7 +3,9 @@ let bb = require('bluebird');
 let request = require('request');
 let _ = require('lodash');
 let requestAsync = bb.promisify(request);
-let cityTransService = require('../domain/cities.js');
+
+
+let cities = require('../domain/cities.js');
 let dicts = require('../domain/dicts.js');
 
 function NiwodaiService() {
@@ -79,8 +81,7 @@ NiwodaiService.prototype.loanAPI = function ({cityName, phone, realName, amount,
   return (async () => {
     let data = this.apiDefs.loanAPI();
     data.json  = _.extend(data.json, arguments[0]);
-    let rtn = await this.post(data);
-    return rtn;
+    return  await this.post(data);
   })();
 };
 
@@ -95,7 +96,7 @@ NiwodaiService.prototype.doLoan = function ({cityId, phone, realName, gender, am
     }
 
     let params = {
-      cityName: cityTransService.trans(cityId, cityTransService.CITYGROUP_NIWODAI),
+      cityName: await cities.id2Name(cityId, this.ChannelId),
       phone,
       realName,
       amount,

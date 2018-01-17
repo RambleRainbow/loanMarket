@@ -5,6 +5,7 @@ let moment = require('moment');
 let pool = null;
 
 function DbService() {
+  this.startup();
 }
 
 DbService.prototype.exec = function (options) {
@@ -64,6 +65,13 @@ DbService.prototype.updateTask = async function ({taskId, state, msg}) {
     timeout: 40000,
     values: [state, msg, moment().format('YYYY-MM-DD HH:mm:ss'), taskId]
   });
+};
+
+DbService.prototype.getChannelCities = async function() {
+  return await this.exec({
+    sql: 'SELECT CHANNELID,CITYID,CHANNELCITYID from CHANNELCITY',
+    timeout: 60000
+  })
 };
 
 DbService.prototype.startup = function() {

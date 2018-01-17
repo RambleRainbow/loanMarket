@@ -23,6 +23,7 @@ describe('提交申请', function () {
   before(() => {
     db.startup();
   });
+
   beforeEach(function () {
     nwdMock = sinon.mock(nwd);
     dbMock = sinon.mock(db);
@@ -114,10 +115,12 @@ describe('当提交申请时，应该根据规则发送向指定的网站', () =
   let nwdMock;
   before(() => {
     db.startup();
+
   });
 
   beforeEach(() => {
     nwdMock = sinon.mock(nwd);
+    expDoLoan = sinon.stub(nwd, 'doLoan').resolves({errorCode: 0, msg: '1你我贷测试代理：成功'});
   });
 
   describe('你我贷发送逻辑', () => {
@@ -130,7 +133,7 @@ describe('当提交申请时，应该根据规则发送向指定的网站', () =
         amount: 5
       };
 
-      expDoLoan = sinon.stub(nwd, 'doLoan').resolves({errorCode: 0, msg: '1你我贷测试代理：成功'});
+
 
       let rtn = await loans.create(testData);
 
@@ -161,8 +164,6 @@ describe('当提交申请时，应该根据规则发送向指定的网站', () =
           amount: 6
         }];
 
-      expDoLoan = sinon.stub(nwd, 'doLoan').resolves({errorCode: 0, msg: '1你我贷测试代理：成功'});
-
       await Promise.all(_.map(testDatas, (it) => {
         return (async () => {
           await loans.create(it);
@@ -176,6 +177,7 @@ describe('当提交申请时，应该根据规则发送向指定的网站', () =
 
   afterEach(() => {
     nwdMock.restore();
+    expDoLoan.restore();
   });
 
   after(() => {

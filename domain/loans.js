@@ -19,24 +19,24 @@ Loans.prototype.makeTicketId = function ({cityId, phone, name, gender, amount}) 
   return hash.digest('HEX');
 };
 
-Loans.prototype.createTasks = function({cityId, amount}) {
+Loans.prototype.createTasks = async function({cityId, amount}) {
   let tasks = [];
 
-  if(amount <= 5 && cityService.haveCityIn(cityId, cityService.CHANNEL_NIWODAI)){
+  if(amount <= 5 && await cityService.haveCityIn(cityId, dicts.channel.CHANNEL_NIWODAI)){
     tasks.push({
       channelId: dicts.channel.CHANNEL_NIWODAI,
       planTime: moment().format('YYYY-MM-DD HH:mm:ss'),
     })
   }
 
-  if(amount >= 5 && cityService.haveCityIn(cityId, cityService.CHANNEL_RONGZI)){
+  if(amount >= 5 && await cityService.haveCityIn(cityId, dicts.channel.CHANNEL_RONGZI)){
     tasks.push({
       channelId: dicts.channel.CHANNEL_RONGZI,
       planTime: moment().format('YYYY-MM-DD HH:mm:ss'),
     })
   }
 
-  if(amount >= 3 && cityService.haveCityIn(cityId, cityService.CHANNEL_HAODAI)){
+  if(amount >= 3 && await cityService.haveCityIn(cityId, dicts.channel.CHANNEL_HAODAI)){
     tasks.push({
       channelId: dicts.channel.CHANNEL_HAODAI,
       planTime: moment().format('YYYY-MM-DD HH:mm:ss'),
@@ -58,7 +58,7 @@ Loans.prototype.create = async function ({cityId, phone, name, gender, amount}) 
     }
   }
 
-  let tasks = this.createTasks(loanItem);
+  let tasks = await this.createTasks(loanItem);
   for(let i = 0; i <tasks.length; i++) {
     await dispTasks.create(_.extend(tasks[i], loanItem));
   }

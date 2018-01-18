@@ -4,7 +4,7 @@ let crypto = require('crypto');
 let request = require('request');
 let bb = require('bluebird');
 
-let cityService = require('../domain/cities.js');
+let cities = require('../domain/cities.js');
 let dicts = require('../domain/dicts.js');
 
 let requestAsync = bb.promisify(request);
@@ -31,7 +31,7 @@ function HaodaiService() {
             //默认
             month: 12,//贷款期限，单位月
             age: 25 + Math.ceil(Math.random() * 10),//年龄
-            salary_bank_public: 3000 + Math.ceil(Math.random()*5000),//月收入，以元为单位
+            salary_bank_public: 3000 + Math.ceil(Math.random() * 5000),//月收入，以元为单位
             salary_bank_private: 1,//工资发放形式（1银行代发 2转账工资 3现金发放 4自由职业收入)
 
             //默认
@@ -66,7 +66,7 @@ HaodaiService.prototype.cryptoField = function (data) {
   return this.encrypt(dataStr, this.key)
 };
 
-HaodaiService.prototype.post = async function({url, param}) {
+HaodaiService.prototype.post = async function ({url, param}) {
   let postData = _.cloneDeep(param);
   postData.field = this.cryptoField(postData.field);
 
@@ -82,29 +82,29 @@ HaodaiService.prototype.post = async function({url, param}) {
   return res.body;
 };
 
-HaodaiService.prototype.loanAPI = function ({cityId, phone, realName, amount}) {
-  return (async() => {
-    let param = _.clone(this.apiDefs.loanAPI.param());
+HaodaiService.prototype.loanAPI = async function ({cityName, phone, realName, amount}) {
+  let param = _.clone(this.apiDefs.loanAPI.param());
 
-    //必填字段
-    param.field.username = realName;
-    param.field.money = amount * 10000;
-    param.field.zone_id = Number.parseInt(cityId);
-    param.field.mobile = Number.parseInt(phone);
+  //必填字段
+  param.field.username = realName;
+  param.field.money = amount * 10000;
+  param.field.zone_id = Number.parseInt(cityName);
+  param.field.mobile = Number.parseInt(phone);
 
-    return await this.post({
-      url:this.apiDefs.loanAPI.url,
-      param
-    });
-  })();
+  return await this.post({
+    url: this.apiDefs.loanAPI.url,
+    param
+  });
 };
 
-HaodaiService.prototype.doLoan = function ({cityId, phone, realName, gender, amount}) {
-  //TODO: haodaiService.doLoan
-  return {
-    errorCode: 0,
-    msg: '[发送成功]'
-  }
+HaodaiService.prototype.doLoan = async function ({cityId, phone, realName, gender, amount}) {
+  let param = {
+    cityName:await cities.id2Name(cityId, this.ChannelId),
+    phone,
+    realName,
+    amount
+  };
+  return await this.loanAPI(param);
 }
 
 module.exports = new HaodaiService();

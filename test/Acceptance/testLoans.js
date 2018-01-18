@@ -132,9 +132,6 @@ describe('当提交申请时，应该根据规则发送向指定的网站', () =
         gender: 1,
         amount: 5
       };
-
-
-
       let rtn = await loans.create(testData);
 
       expDoLoan.calledOnce.should.equal(true);
@@ -177,6 +174,7 @@ describe('当提交申请时，应该根据规则发送向指定的网站', () =
 
   afterEach(() => {
     nwdMock.restore();
+    expDoLoan.restore();
     expDoLoan.restore();
   });
 

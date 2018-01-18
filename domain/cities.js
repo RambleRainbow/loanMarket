@@ -37,9 +37,8 @@ CityService.prototype.init = async function () {
     })
     .value();
 
-  //TODO：定义？？
   return {
-    errorCode: 0
+    errorCode: this.ERROR_SUCCESS
   }
 };
 
@@ -75,5 +74,6 @@ CityService.prototype.name2Id = async function(cityName, channelId) {
   return await this.id2Name(cityName, channelId);
 };
 
+CityService.prototype.ERROR_SUCCESS = 0;
 
 module.exports = new CityService();

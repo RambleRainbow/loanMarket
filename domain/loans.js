@@ -50,6 +50,7 @@ Loans.prototype.create = async function ({cityId, phone, name, gender, amount}) 
   let loanItem = _.extend(arguments[0], {ticketId: ''});
   loanItem.ticketId = this.makeTicketId(arguments[0]);
 
+  //是否保存到本地文件
   let rtn = await db.saveLoan(loanItem);
   if (rtn.errorCode !== db.ERROR_SUCCESS) {
     return {

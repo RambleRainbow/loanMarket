@@ -4,7 +4,7 @@ let bb = require('bluebird');
 let moment = require('moment');
 let crypto = require('crypto');
 let _ = require('lodash');
-let cityService = require('../domain/cities.js');
+let cities = require('../domain/cities.js');
 let dicts = require('../domain/dicts.js');
 
 let requestAsync = bb.promisify(request);
@@ -119,12 +119,16 @@ RongziService.prototype.registerAPI = function ({cityName, phone, realName, gend
   })();
 };
 
-RongziService.prototype.doLoan = function ({cityId, phone, realName, gender, amount}) {
-  //TODO:
-  return {
-    errorCode: 0,
-    msg: "[发送成功]"
+RongziService.prototype.doLoan = async function ({cityId, phone, realName, gender, amount}) {
+  let param = {
+    cityName: await cities.id2Name(cityId, this.ChannelId),
+    phone: phone,
+    realName,
+    gender: gender === 1 ? 1 : 2,
+    amount
   }
+
+  return await this.registerAPI(param);
 }
 
 module.exports = new RongziService();

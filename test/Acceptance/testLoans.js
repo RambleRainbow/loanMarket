@@ -94,7 +94,7 @@ describe('提交申请', function () {
 
     exp.restore();
     exp = sinon.stub(nwd, 'doLoan').resolves({errorCode: -1, msg: '测试发送失败状态'});
-    rtn = await loans.create(testData);
+    await loans.create(testData);
     spyUpdateTask.getCall(1).args[0].state.should.equal(dicts.taskState.TASKSTATE_FAIL);
 
     spyUpdateTask.restore();
@@ -145,7 +145,7 @@ describe('当提交申请时，应该根据规则发送向指定的网站', () =
       };
       let exp = nwdMock.expects('doLoan').resolves({errorCode: 0, msg: '测试成功'});
 
-      let rtn = await loans.create(testData);
+      await loans.create(testData);
 
       exp.calledOnce.should.equal(true);
       objEqualto(testData, exp.getCall(0).args[0]);
@@ -190,7 +190,7 @@ describe('当提交申请时，应该根据规则发送向指定的网站', () =
     it('贷款额度>=3W，并且符合城市', async() => {
       await cities.init();
       //cityId, phone, name, gender, amount
-      var testData = [
+      let testData = [
         [ '110000','13916900000','张三',1, 3, true],
         [ '110000','13916900000','张三',1, 4, true],
         [ '110000x','13916900000','张三',1, 3, false],
@@ -214,10 +214,47 @@ describe('当提交申请时，应该根据规则发送向指定的网站', () =
           amount: testData[i][4]
         };
 
-        let rtn = await loans.create(data);
+        await loans.create(data);
 
         exp.calledOnce.should.equal(testData[i][5]);
         hdMock.restore();
+      }
+    });
+  });
+
+  describe('东方融资网发送逻辑', () => {
+    it('贷款额度>=5W，并且符合城市', async() => {
+      await cities.init();
+      //cityId, phone, name, gender, amount
+      let testData = [
+        [ '320200','13916900000','张三',1, 5, true],
+        [ '320200','13916900000','张三',1, 6, true],
+        [ '320200','13916900000','张三',1, 4, false],
+        [ '320200','13916900000','张三',1, 3, false],
+
+        [ '450400','13916900000','张三',1, 5, false],
+        [ '450400','13916900000','张三',1, 4, false],
+        [ '450400','13916900000','张三',1, 3, false],
+        [ '450400','13916900000','张三',1, 2, false]
+      ];
+
+      rzMock.restore();
+      for(let i = 0; i <testData.length; i++) {
+        console.log(testData[i]);
+        rzMock = sinon.mock(rz);
+        let exp = rzMock.expects('doLoan').resolves({errorCode: 0, msg: '东方融资网测试逻辑'});
+        let data = {
+          cityId: testData[i][0],
+          phone: testData[i][1],
+          name: testData[i][2],
+          gender: testData[i][3],
+          amount: testData[i][4]
+        };
+
+        await loans.create(data);
+
+        exp.calledOnce.should.equal(testData[i][5]);
+        rzMock.restore();
       }
     });
   });

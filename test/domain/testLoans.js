@@ -49,7 +49,8 @@ describe("[贷款] create操作", function() {
     dbMock.expects('saveLoan').resolves({errorCode: -1});
     let rtn = await loans.create({});
     rtn.should.have.property('errorCode', loans.ERROR_DBOPT);
-    rtn.should.have.property('msg', '数据库保存失败')
+    rtn.should.have.property('msg');
+    rtn.msg.should.match(/数据库保存失败/);
   });
 
   it("即使使用相同数据进行申请时，每次返回不同的ticketId", async() => {

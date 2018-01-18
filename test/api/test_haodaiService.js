@@ -7,8 +7,8 @@ describe('好贷接口测试', function() {
 
     (async() => {
       let testData = {
-        cityId: '110100',
-        phone: '13916900000',
+        cityName: '110100',
+        phone: '13916900001',
         realName: '张三',
         amount: 1
       };

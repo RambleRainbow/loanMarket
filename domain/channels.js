@@ -7,9 +7,9 @@ let db = require('../services/dbService');
 let dict = require('./dicts');
 
 let channels = [
-  {id: dict.channel.CHANNEL_NIWODAI, name: '你我贷', isOpen: false},
-  {id: dict.channel.CHANNEL_HAODAI, name: '好贷', isOpen: false},
-  {id: dict.channel.CHANNEL_RONGZI, name: '东方融资网', isOpen: false}
+  {id: dict.channel.CHANNEL_NIWODAI, name: '你我贷', isOpen: true},
+  {id: dict.channel.CHANNEL_HAODAI, name: '好贷', isOpen: true},
+  {id: dict.channel.CHANNEL_RONGZI, name: '东方融资网', isOpen: true}
 ];
 
 function Channels() {

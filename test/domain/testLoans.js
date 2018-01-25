@@ -78,18 +78,3 @@ describe("[贷款] create操作", function() {
     cityServiceMock.restore();
   });
 });
-
-
-// describe('[UT]贷款发送逻辑生成', () => {
-//   beforeEach(function() {
-//     var cityServiceMock = sinon.mock(cityService);
-//   });
-//
-//   it('<5w', async(done) => {
-//
-//   });
-//
-//   afterEach(function() {
-//     cityServiceMock.restore();
-//   });
-// });

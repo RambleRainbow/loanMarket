@@ -6,6 +6,7 @@ let moment = require('moment');
 
 let channels = require('./channels.js');
 let dicts = require('./dicts.js');
+let log = require('../tools/log');
 
 let m_tasks = [];
 
@@ -14,6 +15,8 @@ function DispTasks() {
 }
 
 DispTasks.prototype.postTaskToChannel = async function() {
+
+  log.debug('有效任务共' + m_tasks.length + '个');
   let taskGroup = _.chain(m_tasks)
     .groupBy((it) => { return it.planTime <= moment().format('YYYY-MM-DD HH:mm:ss') ? 'valid':'delay'})
     .value();
@@ -23,12 +26,15 @@ DispTasks.prototype.postTaskToChannel = async function() {
   var rtn;
 
   for(let i = 0; i < validTasks.length; i++ ) {
+    log.debug('发送任务:' + validTasks[i].taskId);
     let rtnPort = await channels.postTask(validTasks[i]);
     if(rtnPort.errorCode === 0) {
+      log.info('任务发送成功：' + validTasks[i].taskId + ',' + rtnPort.msg);
       rtn = await this.updateTask(validTasks[i].taskId, dicts.taskState.TASKSTATE_SUCCESS, rtnPort.msg);
     }
     else
     {
+      log.error('任务发送失败：' + validTasks[i].taskId + ',' + rtnPort.msg);
       rtn = await this.updateTask(validTasks[i].taskId, dicts.taskState.TASKSTATE_FAIL, rtnPort.msg);
     }
   }
@@ -60,9 +66,11 @@ DispTasks.prototype.create = async function({channelId, planTime, cityId, phone,
     taskState: dicts.taskState.TASKSTATE_INIT
   });
   let rtn = await this.saveTask(taskDO);
+  log.info('保存分发任务：' + rtn.msg);
 
   if(rtn.errorCode === 0) {
     m_tasks.push(taskDO);
+    log.info('向渠道派发数据:' + taskDO);
     await this.postTaskToChannel();
   }
 };

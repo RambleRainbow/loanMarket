@@ -10,6 +10,7 @@ var users = require('./routes/users');
 let captchas = require('./routes/captchas');
 let loans = require('./routes/loans');
 let channels = require('./routes/channels.js');
+let datasync = require('./domain/datasync');
 
 var app = express();
 
@@ -48,5 +49,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+datasync.syncData();
 
 module.exports = app;

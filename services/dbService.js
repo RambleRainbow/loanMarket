@@ -13,16 +13,14 @@ DbService.prototype.exec = function (options) {
   return new Promise(function(resolve, reject) {
       pool.getConnection((err, conn) => {
         if (err) {
-          conn.release();
-          reject({
+          resolve({
             errorCode: self.ERROR_GETCONNECTION,
             msg: '[得到数据库连接错误]' + err.message
           })
         }
         conn.query(options, (err, results, fields) => {
           if (err) {
-            conn.release();
-            reject({
+            resolve({
               errorCode: self.ERROR_EXECERROR,
               msg: '[SQL执行错误]' + err.message
             })

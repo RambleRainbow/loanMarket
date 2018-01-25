@@ -6,7 +6,6 @@ let moment = require('moment');
 let crypto = require('crypto');
 
 var allCaptchas = {};
-var sha = crypto.createHash('SHA256');
 
 router.post('/', function(req, res, next) {
     let captcha = svgCaptcha.create();
@@ -17,6 +16,7 @@ router.post('/', function(req, res, next) {
         text: captcha.text
     };
 
+    let sha = crypto.createHash('SHA256');
     let hashid = sha.update(JSON.stringify(result) + captcha.data).digest('hex');
     allCaptchas[hashid] = result;
 

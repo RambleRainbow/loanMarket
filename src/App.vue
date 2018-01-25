@@ -6,7 +6,7 @@
       <mu-bottom-nav-item value="首页" title="首页" icon="home"/>
       <mu-bottom-nav-item value="查询" title="查询" icon="search"/>
       <mu-bottom-nav-item value="统计" title="统计" icon="insert_chart"/>
-      <mu-bottom-nav-item value="我的" title="我的" icon="account_box"/>
+      <mu-bottom-nav-item value="设置" title="设置" icon="settings"/>
     </mu-bottom-nav>  </div>
 </template>
 
@@ -29,6 +29,7 @@
         console.log(arguments);
         this.bottomNav = val;
         this.pageTitle = val;
+        this.$router.push('/settings');
       }
     }
   }

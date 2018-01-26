@@ -79,7 +79,7 @@ DbService.prototype.getChannelCities = async function () {
 
 DbService.prototype.startup = function () {
   log.info('连接数据库。。。');
-  pool = mysql.createPool(config.get('mysql'));
+  pool = mysql.createPool(config.get('db'));
 };
 
 

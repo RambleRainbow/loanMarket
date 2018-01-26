@@ -4,15 +4,12 @@ let fs = require('fs');
 let _ = require('lodash');
 let loans = require('./loans');
 let log = require('../tools/log');
+let config = require('config');
 
 const INTERVAL_SYNC = 5 * 1000;
 const FILE_LOG = './synccounter.txt';
 
-const odbconfig = {
-  user: 'prod',
-  password: 'prod',
-  connectString: '118.31.70.171/prod'
-}
+const odbconfig = config.get('syncdb');
 
 function DataSync() {
 }

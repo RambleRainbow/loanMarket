@@ -70,7 +70,7 @@ DispTasks.prototype.create = async function({channelId, planTime, cityId, phone,
 
   if(rtn.errorCode === 0) {
     m_tasks.push(taskDO);
-    log.info('向渠道派发数据:' + taskDO);
+    log.info('向渠道派发数据:' + JSON.stringify(taskDO));
     await this.postTaskToChannel();
   }
 };

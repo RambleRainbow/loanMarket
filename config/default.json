@@ -1,9 +1,14 @@
 {
-  "mysql": {
+  "db": {
     "connectionLimit": 10,
     "host": "127.0.0.1",
     "user": "root",
     "password": "1234",
     "database": "loan"
+  },
+  "syncdb": {
+    "user": "prod",
+    "password": "prod",
+    "connectString": "118.31.70.171/prod"
   }
 }

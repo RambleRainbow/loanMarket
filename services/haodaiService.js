@@ -3,6 +3,7 @@ let _ = require('lodash');
 let crypto = require('crypto');
 let request = require('request');
 let bb = require('bluebird');
+let config = require('config');
 
 let cities = require('../domain/cities.js');
 let dicts = require('../domain/dicts.js');
@@ -12,12 +13,12 @@ let requestAsync = bb.promisify(request);
 function HaodaiService() {
   this.ChannelId = dicts.channel.CHANNEL_HAODAI;
 
-  this.key = 'oadn8DkzKf0jvV0hi9fKxaiXSMktnYot';
-  this.channel_id = 23;
-  this.biaoshi = 19;
+  this.key = config.get('chncfg.haodai.key');
+  this.channel_id = config.get('chncfg.haodai.channel_id');
+  this.biaoshi = config.get('chncfg.haodai.biaoshi');
   this.apiDefs = {
     loanAPI: {
-      url: "http://dev.oc.haodai.net/Center/pushOrder",
+      url: config.get('chncfg.haodai.url'),
       param: () => {
         return {
           channel_id: this.channel_id,
@@ -97,14 +98,27 @@ HaodaiService.prototype.loanAPI = async function ({cityName, phone, realName, am
   });
 };
 
-HaodaiService.prototype.doLoan = async function ({cityId, phone, realName, gender, amount}) {
+HaodaiService.prototype.doLoan = async function ({cityId, phone, name, gender, amount}) {
   let param = {
     cityName:await cities.id2Name(cityId, this.ChannelId),
     phone,
-    realName,
+    realName: name,
     amount
   };
-  return await this.loanAPI(param);
+  let rtn = await this.loanAPI(param);
+
+  if(rtn.code === 1000) {
+    return {
+      errorCode: 0,
+      msg: JSON.stringify(rtn)
+    }
+  }
+  else {
+    return {
+      errorCode: -1,
+      msg: JSON.stringify(rtn)
+    }
+  }
 }
 
 module.exports = new HaodaiService();

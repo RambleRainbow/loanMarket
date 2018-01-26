@@ -6,10 +6,12 @@ let loans = require('./loans');
 let log = require('../tools/log');
 let config = require('config');
 
-const INTERVAL_SYNC = 5 * 1000;
+const INTERVAL_SYNC = config.get('datasync.interval');
+const SYNC_LIMIT = config.get('datasync.limit');;
 const FILE_LOG = './synccounter.txt';
 
-const odbconfig = config.get('syncdb');
+
+const odbconfig = config.get('datasync.db');
 
 function DataSync() {
 }
@@ -41,6 +43,7 @@ DataSync.prototype.getNewRecords = async function (curFlag) {
         if (err) {
           log.error(err);
           resolve([]);
+          return;
         }
 
         let sql =
@@ -49,16 +52,17 @@ DataSync.prototype.getNewRecords = async function (curFlag) {
             from v_users
             where id > :flag
             order by id
-          ) where rownum <= 10`;
+          ) where rownum <= :limit`;
         log.debug('exec sql: ' + sql);
         conn.execute(
           sql,
-          {flag: curFlag},
+          {flag: curFlag,limit: SYNC_LIMIT},
           function (err, result) {
             if (err) {
               log.error(err);
               conn.close();
               resolve([]);
+              return;
             }
             log.info('得到新记录' + result.rows.length + '条');
 

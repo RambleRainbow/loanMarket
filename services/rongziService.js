@@ -6,6 +6,7 @@ let crypto = require('crypto');
 let _ = require('lodash');
 let cities = require('../domain/cities.js');
 let dicts = require('../domain/dicts.js');
+let config = require('config');
 
 let requestAsync = bb.promisify(request);
 
@@ -13,11 +14,13 @@ let requestAsync = bb.promisify(request);
 function RongziService() {
   this.ChannelId = dicts.channel.CHANNEL_RONGZI;
 
-  this.secretKey = 'rongzi.com_8763';
+  this.secretKey = config.get('chncfg.rongzi.secretKey');
+  this.url = config.get('chncfg.rongzi.url');
+  this.UtmSource = config.get('chncfg.rongzi.UtmSource');
 
   this.apiDefs = {
     isRegistered: {
-      url: "http://103.242.169.60:19999/rzr/Transfer/isRegistered",
+      url: this.url + "/isRegistered",
       param: () => {
         return {
           CellPhoneNumber: "",
@@ -29,7 +32,7 @@ function RongziService() {
       }
     },
     register: {
-      url: "http://103.242.169.60:19999/rzr/Transfer/Register",
+      url: this.url + "/Register",
       param: () => {
         return {
           CityName: "",//所在城市  拼音
@@ -37,7 +40,7 @@ function RongziService() {
           RealName: "",
           Gender: 1,//男：1 女：2,
           LoanAmount: 1,//贷款额度  单位：万
-          UtmSource: 20,//东方融资网指定
+          UtmSource: this.UtmSource,//东方融资网指定
           TimeStamp: "20000101000000",//yyyyMMddHHmmss
           Signature: "",
 
@@ -119,16 +122,28 @@ RongziService.prototype.registerAPI = function ({cityName, phone, realName, gend
   })();
 };
 
-RongziService.prototype.doLoan = async function ({cityId, phone, realName, gender, amount}) {
+RongziService.prototype.doLoan = async function ({cityId, phone, name, gender, amount}) {
   let param = {
     cityName: await cities.id2Name(cityId, this.ChannelId),
     phone: phone,
-    realName,
+    realName: name,
     gender: gender === 1 ? 1 : 2,
     amount
   }
 
-  return await this.registerAPI(param);
+  let rtn = await this.registerAPI(param);
+  if(rtn.Code === "0") {
+    return {
+      errorCode: 0,
+      msg: JSON.stringify(rtn)
+    }
+  }
+  else {
+    return {
+      errorCode: -1,
+      msg: JSON.stringify(rtn)
+    }
+  }
 }
 
 module.exports = new RongziService();

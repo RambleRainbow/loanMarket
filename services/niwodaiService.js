@@ -7,22 +7,21 @@ let requestAsync = bb.promisify(request);
 
 let cities = require('../domain/cities.js');
 let dicts = require('../domain/dicts.js');
+let config = require('config');
 
 function NiwodaiService() {
   this.ChannelId = dicts.channel.CHANNEL_NIWODAI;
 
-  this.url = "http://api.niwodai.org/interface/callHttpInterfaces.do";
-  this.appId = "APItest";
-  this.appKey = "niwodai88";
-  this.sourceId = "";
-  this.nwd_ext_aid = "5020160023536001";
-
-  this.req_accessCode = "514b3233-4854-4325-81ef-fd1823fded09";
+  this.url = config.get('chncfg.niwodai.url');
+  this.appId = config.get('chncfg.niwodai.appId');
+  this.appKey = config.get('chncfg.niwodai.appKey');
+  this.sourceId = config.get('chncfg.niwodai.sourceId');
+  this.nwd_ext_aid = config.get('chncfg.niwodai.nwd_ext_aid');
 
   this.apiDefs = {
     getToken: () => {
       return {
-        accessCode: "c659d189-8653-4b71-adc8-4934febff124",
+        accessCode: config.get('chncfg.niwodai.accessCode.getToken'),
         json: {
           appId: this.appId,
           appKey: this.appKey
@@ -32,7 +31,7 @@ function NiwodaiService() {
 
     loanAPI: () => {
       return {
-        accessCode: "514b3233-4854-4325-81ef-fd1823fded09",
+        accessCode: config.get('chncfg.niwodai.accessCode.loan'),
         json: {
           //参数字段
           cityName: "",
@@ -85,7 +84,7 @@ NiwodaiService.prototype.loanAPI = function ({cityName, phone, realName, amount,
   })();
 };
 
-NiwodaiService.prototype.doLoan = function ({cityId, phone, realName, gender, amount}) {
+NiwodaiService.prototype.doLoan = function ({cityId, phone, name, gender, amount}) {
   return (async () => {
     let token = await this.getTokenAPI();
     if (token.success !== 1) {
@@ -98,7 +97,7 @@ NiwodaiService.prototype.doLoan = function ({cityId, phone, realName, gender, am
     let params = {
       cityName: await cities.id2Name(cityId, this.ChannelId),
       phone,
-      realName,
+      realName: name,
       amount,
       token: token.data.accessToken
     };

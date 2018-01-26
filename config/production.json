@@ -2,19 +2,59 @@
   "db": {
     "connectionLimit": 10,
     "host": "47.97.214.97",
-    "port":1521,
+    "port": 1521,
     "user": "root",
     "password": "eechee8Ie6quuZaeBoox4cielie1fit8",
     "database": "loan"
   },
-  "syncdb": {
-    "user": "prod",
-    "password": "prod",
-    "connectString": "118.31.70.171/prod"
+  "datasync": {
+    "db": {
+      "user": "prod",
+      "password": "prod",
+      "connectString": "118.31.70.171/prod"
+    },
+    "interval": 10000,
+    "limit": 10
   },
-  "channels":[
-    {"id": 10, "name": "好贷", "isOpen": false},
-    {"id": 20, "name": "东方融资网", "isOpen": false},
-    {"id": 30, "name": "你我贷", "isOpen": false}
-  ]
+  "channels": [
+    {
+      "id": 10,
+      "name": "好贷",
+      "isOpen": true
+    },
+    {
+      "id": 20,
+      "name": "东方融资网",
+      "isOpen": true
+    },
+    {
+      "id": 30,
+      "name": "你我贷",
+      "isOpen": false
+    }
+  ],
+  "chncfg": {
+    "haodai": {
+      "key": "oadn8DkzKf0jvV0hi9fKxaiXSMktnYot",
+      "channel_id": 33,
+      "biaoshi": 19,
+      "url": "http://dev.oc.haodai.net/Center/pushOrder"
+    },
+    "rongzi": {
+      "secretKey": "rongzi.com_8763",
+      "url": "http://mirzr.rongzi.com/rzr/Transfer",
+      "UtmSource": 204
+    },
+    "niwodai": {
+      "url": "https://api.niwodai.com/interface/callHttpInterfaces.do",
+      "accessCode": {
+        "getToken": "c659d189-8653-4b71-adc8-4934febff124",
+        "loan": "514b3233-4854-4325-81ef-fd1823fded09"
+      },
+      "appId": "APItest",
+      "appKey": "niwodai88",
+      "sourceId": "",
+      "nwd_ext_aid": "5020160023536001"
+    }
+  }
 }

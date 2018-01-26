@@ -1,0 +1,9 @@
+{
+  "mysql": {
+    "connectionLimit": 10,
+    "host": "127.0.0.1",
+    "user": "root",
+    "password": "eechee8Ie6quuZaeBoox4cielie1fit8",
+    "database": "loan"
+  }
+}

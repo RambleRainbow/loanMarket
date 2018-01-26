@@ -12,6 +12,7 @@
     "axios": "^0.17.1",
     "bluebird": "^3.5.1",
     "body-parser": "^1.18.2",
+    "config": "^1.29.2",
     "cookie-parser": "^1.4.3",
     "jade": "^1.11.0",
     "log4js": "^2.5.2",

@@ -1,6 +1,8 @@
 "use strict";
 let mysql = require('mysql');
 let moment = require('moment');
+let config = require('config');
+let log = require('../tools/log');
 
 let pool = null;
 
@@ -76,13 +78,8 @@ DbService.prototype.getChannelCities = async function () {
 };
 
 DbService.prototype.startup = function () {
-  pool = mysql.createPool({
-    connectionLimit: 10,
-    host: '127.0.0.1',
-    user: 'root',
-    password: '1234',
-    database: 'loan'
-  });
+  log.info('连接数据库。。。');
+  pool = mysql.createPool(config.get('mysql'));
 };
 
 

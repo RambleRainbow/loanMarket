@@ -107,7 +107,13 @@ DataSync.prototype.syncData = function () {
 
        for (let i = 0; i < datas.length; i++) {
          let rtn = await loans.create(datas[i]);
-         log.info('发送第' + (i+1) + '条:' + rtn.msg);
+         if(rtn.errorCode === 0) {
+           log.info('第' + (i+1) + '条发送成功:' + rtn.msg);
+         }
+         else {
+           log.error('第' + (i+1) + '条发送失败:' + rtn.msg);
+         }
+
        }
     }
     setTimeout(function(){self.syncData();}, INTERVAL_SYNC);

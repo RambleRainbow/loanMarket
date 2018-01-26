@@ -10,7 +10,7 @@ function DbService() {
 
 DbService.prototype.exec = function (options) {
   let self = this;
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
       pool.getConnection((err, conn) => {
         if (err) {
           resolve({
@@ -18,24 +18,27 @@ DbService.prototype.exec = function (options) {
             msg: '[得到数据库连接错误]' + err.message
           })
         }
-        conn.query(options, (err, results, fields) => {
-          if (err) {
-            resolve({
-              errorCode: self.ERROR_EXECERROR,
-              msg: '[SQL执行错误]' + err.message
-            })
-          }
-
-          conn.release();
-          resolve({
-            errorCode: self.ERROR_SUCCESS,
-            msg: '[执行成功]',
-            data: {
-              results: results,
-              fields: fields
+        else {
+          conn.query(options, (err, results, fields) => {
+            if (err) {
+              resolve({
+                errorCode: self.ERROR_EXECERROR,
+                msg: '[SQL执行错误]' + err.message
+              })
+            }
+            else {
+              conn.release();
+              resolve({
+                errorCode: self.ERROR_SUCCESS,
+                msg: '[执行成功]',
+                data: {
+                  results: results,
+                  fields: fields
+                }
+              })
             }
           })
-        })
+        }
       })
     }
   )
@@ -65,14 +68,14 @@ DbService.prototype.updateTask = async function ({taskId, state, msg}) {
   });
 };
 
-DbService.prototype.getChannelCities = async function() {
+DbService.prototype.getChannelCities = async function () {
   return await this.exec({
     sql: 'SELECT CHANNELID,CITYID,CHANNELCITYID from CHANNELCITY',
     timeout: 60000
   })
 };
 
-DbService.prototype.startup = function() {
+DbService.prototype.startup = function () {
   pool = mysql.createPool({
     connectionLimit: 10,
     host: '127.0.0.1',
@@ -83,7 +86,7 @@ DbService.prototype.startup = function() {
 };
 
 
-DbService.prototype.shutdown = function() {
+DbService.prototype.shutdown = function () {
   pool.end();
 };
 

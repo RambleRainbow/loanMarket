@@ -1,7 +1,8 @@
 {
   "db": {
     "connectionLimit": 10,
-    "host": "127.0.0.1",
+    "host": "47.97.214.97",
+    "port":1521,
     "user": "root",
     "password": "eechee8Ie6quuZaeBoox4cielie1fit8",
     "database": "loan"
@@ -10,5 +11,10 @@
     "user": "prod",
     "password": "prod",
     "connectString": "118.31.70.171/prod"
-  }
+  },
+  "channels":[
+    {"id": 10, "name": "好贷", "isOpen": false},
+    {"id": 20, "name": "东方融资网", "isOpen": false},
+    {"id": 30, "name": "你我贷", "isOpen": false}
+  ]
 }

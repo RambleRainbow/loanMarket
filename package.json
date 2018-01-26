@@ -6,7 +6,8 @@
   "private": true,
   "scripts": {
     "init": "npm init",
-    "start": "node bin/www"
+    "dev": "node bin/www",
+    "prod": "NODE_ENV=production node bin/www"
   },
   "dependencies": {
     "axios": "^0.17.1",
@@ -14,6 +15,7 @@
     "body-parser": "^1.18.2",
     "config": "^1.29.2",
     "cookie-parser": "^1.4.3",
+    "express": "^4.16.2",
     "jade": "^1.11.0",
     "log4js": "^2.5.2",
     "moment": "^2.20.1",

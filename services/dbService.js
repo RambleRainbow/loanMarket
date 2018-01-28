@@ -48,7 +48,7 @@ DbService.prototype.exec = function (options) {
 
 DbService.prototype.saveLoan = async function ({ticketId, cityId, phone, name, gender, amount}) {
   return await  this.exec({
-    sql: 'insert into loan (TICKID,CITYID,PHONE,NAME,AMOUNT,GENDER,TIMESTAMP) values(?,?,?,?,?,?,?)',
+    sql: 'insert into LOAN (TICKID,CITYID,PHONE,NAME,AMOUNT,GENDER,TIMESTAMP) values(?,?,?,?,?,?,?)',
     timeout: 40000,
     values: [ticketId, cityId, phone, name, amount, gender, moment().format('YYYY-MM-DD HH:mm:ss.SSS')]
   });
@@ -56,7 +56,7 @@ DbService.prototype.saveLoan = async function ({ticketId, cityId, phone, name, g
 
 DbService.prototype.saveTask = async function ({taskId, ticketId, channelId, taskState, planTime}) {
   return await  this.exec({
-    sql: 'insert into loantask (TASKID, TICKID, CHANNELID, STATE, PLANTIME) values(?,?,?,?,?)',
+    sql: 'insert into LOANTASK (TASKID, TICKID, CHANNELID, STATE, PLANTIME) values(?,?,?,?,?)',
     timeout: 40000,
     values: [taskId, ticketId, channelId, taskState, planTime]
   })

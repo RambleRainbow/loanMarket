@@ -12,9 +12,11 @@ function DbService() {
 
 DbService.prototype.exec = function (options) {
   let self = this;
+  log.debug('SQL执行：' + options.sql);
   return new Promise(function (resolve, reject) {
       pool.getConnection((err, conn) => {
         if (err) {
+          log.debug('SQL执行错误:' + err.message);
           resolve({
             errorCode: self.ERROR_GETCONNECTION,
             msg: '[得到数据库连接错误]' + err.message
@@ -23,6 +25,7 @@ DbService.prototype.exec = function (options) {
         else {
           conn.query(options, (err, results, fields) => {
             if (err) {
+              log.debug('SQL执行错误:' + err.message);
               resolve({
                 errorCode: self.ERROR_EXECERROR,
                 msg: '[SQL执行错误]' + err.message
@@ -30,6 +33,7 @@ DbService.prototype.exec = function (options) {
             }
             else {
               conn.release();
+              log.debug('SQL执行成功');
               resolve({
                 errorCode: self.ERROR_SUCCESS,
                 msg: '[执行成功]',

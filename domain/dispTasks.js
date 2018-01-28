@@ -37,6 +37,7 @@ DispTasks.prototype.postTaskToChannel = async function() {
       log.error('任务发送失败：' + validTasks[i].taskId + ',' + rtnPort.msg);
       rtn = await this.updateTask(validTasks[i].taskId, dicts.taskState.TASKSTATE_FAIL, rtnPort.msg);
     }
+    log.debug('任务状态更新操作数据库结果：' + JSON.stringify(rtn));
   }
 
   return rtn;

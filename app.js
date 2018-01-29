@@ -7,6 +7,12 @@ var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+
+let log = require('./tools/log');
+log.info('==========应用开始启动================');
+log.info('当前系统环境:' + process.env.NODE_ENV);
+
+
 let captchas = require('./routes/captchas');
 let loans = require('./routes/loans');
 let channels = require('./routes/channels.js');
@@ -60,6 +66,7 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+log.info('数据同步系统启动');
 datasync.syncData();
 
 module.exports = app;

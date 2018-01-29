@@ -30,7 +30,7 @@
     {
       "id": 30,
       "name": "你我贷",
-      "isOpen": true 
+      "isOpen": true
     }
   ],
   "chncfg": {
@@ -48,13 +48,13 @@
     "niwodai": {
       "url": "https://api.niwodai.com/interface/callHttpInterfaces.do",
       "accessCode": {
-        "getToken": "c659d189-8653-4b71-adc8-4934febff124",
-        "loan": "514b3233-4854-4325-81ef-fd1823fded09"
+        "getToken": "52ef5930-1a21-40d9-9c13-2545da3db1c6",
+        "loan": "da1f3584-20f3-4628-b29d-4f7d1e84600c"
       },
-      "appId": "APItest",
-      "appKey": "niwodai88",
+      "appId": "dianlianapi",
+      "appKey": "e298944224d6bbfcf78853a08968fc15",
       "sourceId": "",
-      "nwd_ext_aid": "5020160023536001"
+      "nwd_ext_aid": "5020161826188108"
     }
   }
 }

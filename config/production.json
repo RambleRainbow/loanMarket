@@ -13,7 +13,7 @@
       "password": "prod",
       "connectString": "118.31.70.171/prod"
     },
-    "interval": 10000,
+    "interval": 1000000,
     "limit": 10
   },
   "channels": [
@@ -30,7 +30,7 @@
     {
       "id": 30,
       "name": "你我贷",
-      "isOpen": false
+      "isOpen": true 
     }
   ],
   "chncfg": {
@@ -38,7 +38,7 @@
       "key": "oadn8DkzKf0jvV0hi9fKxaiXSMktnYot",
       "channel_id": 33,
       "biaoshi": 19,
-      "url": "http://dev.oc.haodai.net/Center/pushOrder"
+      "url": "http://oc.haodai.com/Center/pushOrder"
     },
     "rongzi": {
       "secretKey": "rongzi.com_8763",

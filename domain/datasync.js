@@ -101,7 +101,7 @@ DataSync.prototype.syncData = function () {
           cityId: it.WORKCITY,
           phone: it.TEL,
           name: it.USERNAME,
-          gender: it.GENDER,
+          gender: Number.parseInt(it.GENDER),
           amount: it.LOANS
         }
       });

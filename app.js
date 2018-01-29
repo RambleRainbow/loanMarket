@@ -60,6 +60,6 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-//datasync.syncData();
+datasync.syncData();
 
 module.exports = app;

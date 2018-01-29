@@ -129,7 +129,7 @@ RongziService.prototype.doLoan = async function ({cityId, phone, name, gender, a
     realName: name,
     gender: gender === 1 ? 1 : 2,
     amount
-  }
+  };
 
   let rtn = await this.registerAPI(param);
   if(rtn.Code === "0") {
@@ -144,6 +144,6 @@ RongziService.prototype.doLoan = async function ({cityId, phone, name, gender, a
       msg: JSON.stringify(rtn)
     }
   }
-}
+};
 
 module.exports = new RongziService();

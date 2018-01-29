@@ -4,6 +4,7 @@ let crypto = require('crypto');
 let request = require('request');
 let bb = require('bluebird');
 let config = require('config');
+let log = require('../tools/log');
 
 let cities = require('../domain/cities.js');
 let dicts = require('../domain/dicts.js');
@@ -71,6 +72,8 @@ HaodaiService.prototype.post = async function ({url, param}) {
   let postData = _.cloneDeep(param);
   postData.field = this.cryptoField(postData.field);
 
+  log.debug('好贷发送:' + JSON.stringify(postData));
+
   let res = await requestAsync({
     url: url,
     method: 'POST',
@@ -80,6 +83,7 @@ HaodaiService.prototype.post = async function ({url, param}) {
     },
     body: postData
   });
+  log.debug('好贷发送结果:' + JSON.stringify(res.body));
   return res.body;
 };
 

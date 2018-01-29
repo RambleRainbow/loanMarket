@@ -4,6 +4,8 @@ let request = require('request');
 let _ = require('lodash');
 let requestAsync = bb.promisify(request);
 
+let log = require('../tools/log');
+
 
 let cities = require('../domain/cities.js');
 let dicts = require('../domain/dicts.js');
@@ -60,11 +62,13 @@ NiwodaiService.prototype.post = function (data) {
       accessCode: data.accessCode,
       jsonParam: JSON.stringify(data.json)
     };
+    log.debug('你我贷发送:' + JSON.stringify(postData));
     let rtn = await requestAsync({
       url: this.url,
       method: 'POST',
       form: postData
     });
+    log.debug('你我贷发送结果:' + JSON.stringify(rtn));
     return JSON.parse(rtn.body);
   })();
 };

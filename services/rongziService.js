@@ -8,6 +8,8 @@ let cities = require('../domain/cities.js');
 let dicts = require('../domain/dicts.js');
 let config = require('config');
 
+let log = require('../tools/log');
+
 let requestAsync = bb.promisify(request);
 
 
@@ -72,6 +74,7 @@ RongziService.prototype.sign = function () {
 };
 
 RongziService.prototype.post = async ({url, param}) => {
+  log.debug('东方融资发送:' + JSON.stringify(param));
   let res = await requestAsync({
     url: url,
     method: 'POST',
@@ -81,6 +84,7 @@ RongziService.prototype.post = async ({url, param}) => {
     },
     body: param
   });
+  log.debug('东方融资发送结果:' + JSON.stringify(res.body));
   return res.body;
 };
 

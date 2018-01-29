@@ -20,9 +20,27 @@ router.get('/', function (req, res, next) {
   })();
 });
 
-router.get('/:id', function(req, res,next) {
+router.patch('/:id', function(req, res,next) {
   (async() => {
-    let rtn = channels.readAll()
+    console.log(req.body);
+    let rtn = await channels.updateIsOpen({id: Number.parseInt(req.params.id), isOpen: req.body.isOpen});
+
+    res.statusCode = 200;
+
+    switch (rtn.errorCode) {
+      case channels.ERROR_NOCHANNEL:
+        res.statusCode = 404;
+        break;
+      case channels.ERROR_SAVECHANNEL:
+        res.statusCode = 500;
+        break;
+      case channels.ERROR_SUCCESS:
+        res.statusCode = 200;
+        break;
+      default:
+        res.statusCode = 500;
+    }
+    res.json(rtn);
   })();
 });
 

@@ -109,7 +109,7 @@ DataSync.prototype.syncData = function () {
        for (let i = 0; i < datas.length; i++) {
          let rtn = await loans.create(datas[i]);
          if(rtn.errorCode === 0) {
-           log.info('第' + (i+1) + '条发送成功:' + rtn.msg);
+           log.info('第' + (i+1) + '条发送结束:' + rtn.msg);
          }
          else {
            log.error('第' + (i+1) + '条发送失败:' + rtn.msg);

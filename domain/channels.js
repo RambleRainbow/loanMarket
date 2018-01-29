@@ -1,4 +1,7 @@
 "use strict";
+let yaml = require('js-yaml');
+let fs = require('fs');
+let _ = require('lodash');
 
 let nwdService = require('../services/niwodaiService.js');
 let rzService = require('../services/rongziService.js');
@@ -7,19 +10,61 @@ let db = require('../services/dbService');
 let dict = require('./dicts');
 let config = require('config');
 
-let channels = config.get('channels');
+
+const PATH_CHANNEL = 'data/channels.yml';
+
+let channels = [];//config.get('channels');
 
 function Channels() {
+  this.init();
 }
 
-// Channels.prototype.readAll = async function () {
-//   return {
-//     errorCode: 0,
-//     msg: '调用成功',
-//     data: channels
-//   };
-// };
+Channels.prototype.init = function() {
+  try {
+    channels = yaml.safeLoad(fs.readFileSync(PATH_CHANNEL, 'utf8'),{schema: yaml.JSON_SCHEMA});
+  }
+  catch(err) {
+    channels = config.get('channels');
+  }
+};
 
+Channels.prototype.readAll = async function () {
+  return {
+    errorCode: 0,
+    msg: '调用成功',
+    data: channels
+  };
+};
+
+Channels.prototype.updateIsOpen = async function({id, isOpen}) {
+  let channel = _.filter(channels, (item) => {
+    return item.id === id;
+  });
+  if(channel.length !== 1) {
+    return {
+      errorCode: this.ERROR_NOCHANNEL,
+      msg:'未找到对应的通道'
+    };
+  }
+  else {
+    let oldValue = channel[0].isOpen;
+    channel[0].isOpen = (isOpen === true);
+    try {
+      fs.writeFileSync(PATH_CHANNEL, yaml.safeDump(channels,{schema: yaml.JSON_SCHEMA}));
+      return {
+        errorCode: 0,
+        msg:'通道配置成功'
+      }
+    }
+    catch(err) {
+      channel[0].isOpen = oldValue;
+      return {
+        errorCode: this.ERROR_SAVECHANNEL,
+        msg: '通道配置保存失败'
+      }
+    }
+  }
+};
 // Channels.prototype.modify = async function ({id, info}) {
 //   let channel = _.filter(channels, (item) => {
 //     return item.id === id
@@ -95,5 +140,6 @@ Channels.prototype.ERROR_SUCCESS = 0;
 Channels.prototype.ERROR_NOMATCHCHANNEL = -1;
 Channels.prototype.ERROR_NOCHANNEL = -2;
 Channels.prototype.ERROR_DBOPT = -3;
+Channels.prototype.ERROR_SAVECHANNEL = -4;
 
 module.exports = new Channels();

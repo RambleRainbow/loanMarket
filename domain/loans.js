@@ -25,21 +25,21 @@ Loans.prototype.createTasks = async function({cityId, amount}) {
   if(amount <= 5 && await cityService.haveCityIn(cityId, dicts.channel.CHANNEL_NIWODAI)){
     tasks.push({
       channelId: dicts.channel.CHANNEL_NIWODAI,
-      planTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+      planTime: moment().format('YYYY-MM-DD HH:mm:ss.SSS'),
     })
   }
 
   if(amount >= 5 && await cityService.haveCityIn(cityId, dicts.channel.CHANNEL_RONGZI)){
     tasks.push({
       channelId: dicts.channel.CHANNEL_RONGZI,
-      planTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+      planTime: moment().format('YYYY-MM-DD HH:mm:ss.SSS'),
     })
   }
 
   if(amount >= 3 && await cityService.haveCityIn(cityId, dicts.channel.CHANNEL_HAODAI)){
     tasks.push({
       channelId: dicts.channel.CHANNEL_HAODAI,
-      planTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+      planTime: moment().format('YYYY-MM-DD HH:mm:ss.SSS'),
     })
   }
 

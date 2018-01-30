@@ -70,7 +70,7 @@ DbService.prototype.updateTask = async function ({taskId, state, msg}) {
   return await this.exec({
     sql: 'UPDATE `LOANTASK`  set `STATE`=?,`DESC`=?,`EXECTIME`=? where `TASKID`=?',
     timeout: 40000,
-    values: [state, msg, moment().format('YYYY-MM-DD HH:mm:ss'), taskId]
+    values: [state, msg, moment().format('YYYY-MM-DD HH:mm:ss.SSS'), taskId]
   });
 };
 

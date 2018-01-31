@@ -81,6 +81,47 @@ DbService.prototype.getChannelCities = async function () {
   })
 };
 
+DbService.prototype.queryLoansByDate = async function(dateStart, dateEnd, queryLimit) {
+  return await this.exec({
+    sql: `
+      SELECT L.ID,C.CHANNELCITYID,L.PHONE,L.NAME,L.GENDER,L.AMOUNT,T.CHANNELID,T.STATE,T.DESC,L.TIMESTAMP
+      FROM (SELECT * 
+             FROM LOAN 
+             WHERE TIMESTAMP >= ? 
+               AND TIMESTAMP <= ? 
+             ORDER BY ID DESC 
+             LIMIT ?) AS L, 
+            LOANTASK AS T, 
+            CHANNELCITY AS C
+      WHERE L.TICKID = T.TICKID 
+        AND C.CITYID = L.CITYID 
+        AND C.CHANNELID = 40
+    `,
+    values: [dateStart, dateEnd, queryLimit],
+    timeout: 60000
+  });
+};
+
+DbService.prototype.queryLoansByMinId = async function(minid, limit) {
+  return this.exec( {
+    sql: `
+      SELECT L.ID,C.CHANNELCITYID,L.PHONE,L.NAME,L.GENDER,L.AMOUNT,T.CHANNELID,T.STATE,T.DESC,L.TIMESTAMP
+      FROM (SELECT * 
+             FROM LOAN 
+             WHERE ID < ?
+             ORDER BY ID DESC 
+             LIMIT ?) AS L, 
+            LOANTASK AS T, 
+            CHANNELCITY AS C
+      WHERE L.TICKID = T.TICKID 
+        AND C.CITYID = L.CITYID 
+        AND C.CHANNELID = 40
+    `,
+    values: [minid, limit],
+    timeout: 60000
+  });
+};
+
 DbService.prototype.startup = function () {
   log.info('创建连接池');
   pool = mysql.createPool(config.get('db'));

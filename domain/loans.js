@@ -79,6 +79,85 @@ Loans.prototype.create = async function ({cityId, phone, name, gender, amount}) 
   }
 };
 
+Loans.prototype.queryByMinId = async function(minid, limit) {
+  if(isNaN(minid)) {
+    let err = new Error('参数错误');
+    err.Code = Loans.prototype.ERROR_PARAM;
+    throw err;
+  }
+  let queryId = minid;
+
+  let queryLimit = (!isNaN(limit))? Number.parseInt(limit) : 20;
+
+  let dbResults = await db.queryLoansByMinId(queryId,queryLimit);
+  return this.processLoansResult(dbResults);
+};
+
+Loans.prototype.processLoansResult = function (dbResults){
+  if(dbResults.errorCode !== db.ERROR_SUCCESS) {
+    let err = new Error('数据库查询错误:' + dbResults.msg);
+    err.Code = Loans.prototype.ERROR_DBOPT;
+    throw err;
+  }
+
+  let rtn = _.chain(dbResults.data.results)
+    .groupBy(it => { return it.ID;})
+    .mapValues( it => {
+      function maskPhone(phone){
+        return phone.substring(0,3) + '****' + phone.substring(7);
+      }
+
+      let rtn = {
+        id: it[0].ID,
+        phone: maskPhone(it[0].PHONE),
+        name: it[0].NAME,
+        gender: it[0].GENDER === 1 ? '先生':'女士',
+        amount: it[0].AMOUNT,
+        city: it[0].CHANNELCITYID,
+        time: it[0].TIMESTAMP,
+        tasks: []
+      };
+
+      it.forEach(itTask => {
+        rtn.tasks.push({
+          channelid: itTask.CHANNELID,
+          state: itTask.STATE,
+          desc: itTask.DESC
+        });
+      });
+      return rtn;
+    })
+    .values()
+    .sortBy([it => { return it.id * -1;}])
+    .value();
+  return rtn;
+};
+
+Loans.prototype.queryByDate = async function(date, limit) {
+  let queryDate;
+  try{
+    queryDate = date ? moment(date).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
+  }catch(e) {
+    let err = new Error('日期格式错误，应为YYYY-MM-DD');
+    err.Code = Loans.prototype.ERROR_DATEFORMAT;
+    throw err;
+  }
+  let dateStart = queryDate + ' 00:00:00';
+  let dateEnd = queryDate + ' 23.59.59.999';
+
+  let queryLimit = (!isNaN(limit)) ? Number.parseInt(limit) : 20;
+  if(queryLimit > 100 || queryLimit < 1 ) {
+    let err = new Error('查询范围为1~100');
+    err.Code = Loans.prototype.ERROR_RANGE;
+    throw err;
+  }
+
+  let dbResults = await db.queryLoansByDate(dateStart, dateEnd, queryLimit);
+  return this.processLoansResult(dbResults);
+};
+
 Loans.prototype.ERROR_DBOPT = -10001;
+Loans.prototype.ERROR_RANGE = -10002;
+Loans.prototype.ERROR_DATEFORMAT = -10003;
 
 module.exports = new Loans();

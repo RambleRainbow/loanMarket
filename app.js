@@ -67,6 +67,6 @@ app.use(function(err, req, res, next) {
 });
 
 log.info('数据同步系统启动');
-datasync.syncData();
+//datasync.syncData();
 
 module.exports = app;

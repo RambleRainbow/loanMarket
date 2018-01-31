@@ -17,12 +17,13 @@ CityService.prototype.init = async function () {
   m_dicts = _.chain(rows.data.results)
     .map((it) => {
       //前端传来的地名，需要做反向转换，从渠道地名，转为标准地址码
-      if (dicts.channel.CHANNEL_FRONT === it.CHANNELCITYID) {
-        return [it.CHANNELID, it.CHANNELCITYID, it.CITYID];
-      }
-      else {
-        return [it.CHANNELID, it.CITYID, it.CHANNELCITYID];
-      }
+      return [it.CHANNELID, it.CITYID, it.CHANNELCITYID];
+      // if (dicts.channel.CHANNEL_FRONT === it.CHANNELCITYID) {
+      //   return [it.CHANNELID, it.CHANNELCITYID, it.CITYID];
+      // }
+      // else {
+      //   return [it.CHANNELID, it.CITYID, it.CHANNELCITYID];
+      // }
     })
     .groupBy((it) => {
       return it[0];

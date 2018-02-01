@@ -18,7 +18,7 @@ DispTasks.prototype.postTaskToChannel = async function() {
 
   log.debug('有效任务共' + m_tasks.length + '个');
   let taskGroup = _.chain(m_tasks)
-    .groupBy((it) => { return it.planTime <= moment().format('YYYY-MM-DD HH:mm:ss') ? 'valid':'delay'})
+    .groupBy((it) => { return it.planTime <= moment().format('YYYY-MM-DD HH:mm:ss.SSS') ? 'valid':'delay'})
     .value();
 
   let validTasks = taskGroup.hasOwnProperty('valid') ? taskGroup.valid : [];

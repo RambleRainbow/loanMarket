@@ -28,17 +28,17 @@ Loans.prototype.createTasks = async function({cityId, amount}) {
       planTime: moment().format('YYYY-MM-DD HH:mm:ss.SSS'),
     })
   }
+  channelId: dicts.channel.CHANNEL_RONGZI,
+    planTime: moment().format('YYYY-MM-DD HH:mm:ss.SSS'),
+})
+}
+
+if(amount >= 3 && await cityService.haveCityIn(cityId, dicts.channel.CHANNEL_HAODAI)){
+  tasks.push({
+    channelId: dicts.cha
 
   if(amount >= 5 && await cityService.haveCityIn(cityId, dicts.channel.CHANNEL_RONGZI)){
-    tasks.push({
-      channelId: dicts.channel.CHANNEL_RONGZI,
-      planTime: moment().format('YYYY-MM-DD HH:mm:ss.SSS'),
-    })
-  }
-
-  if(amount >= 3 && await cityService.haveCityIn(cityId, dicts.channel.CHANNEL_HAODAI)){
-    tasks.push({
-      channelId: dicts.channel.CHANNEL_HAODAI,
+    tasks.push({nnel.CHANNEL_HAODAI,
       planTime: moment().format('YYYY-MM-DD HH:mm:ss.SSS'),
     })
   }
